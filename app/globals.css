@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/* Design tokens — see CLAUDE.md. Light is default; dark follows the system
+   unless the user picks a theme (data-theme on <html>). */
+:root {
+  --paper: #F5F6F2;
+  --ink: #1C2027;
+  --muted: #5C6573;
+  --line: #D9DDD6;
+  --teal: #0F5A52;
+  --thread: #D9A02B;
+  --surface: #FFFFFF;
+  --banner: #0F5A52;
+  --on-banner: #F5F6F2;
+  --frame: color-mix(in srgb, var(--teal) 7%, var(--paper));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12161B;
+    --ink: #E9ECE6;
+    --muted: #9BA4AE;
+    --line: #2A3038;
+    --teal: #5FB7AA;
+    --thread: #E8B54A;
+    --surface: #191E24;
+    --banner: #123F3A;
+    --frame: color-mix(in srgb, var(--teal) 10%, var(--surface));
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #12161B;
+  --ink: #E9ECE6;
+  --muted: #9BA4AE;
+  --line: #2A3038;
+  --teal: #5FB7AA;
+  --thread: #E8B54A;
+  --surface: #191E24;
+  --banner: #123F3A;
+  --frame: color-mix(in srgb, var(--teal) 10%, var(--surface));
+}
+
+/* Expose tokens to Tailwind: bg-paper, text-ink, border-line, font-serif, etc. */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-teal: var(--teal);
+  --color-thread: var(--thread);
+  --color-surface: var(--surface);
+  --color-banner: var(--banner);
+  --color-on-banner: var(--on-banner);
+  --color-frame: var(--frame);
+  --font-serif: var(--font-spectral), Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-bn: var(--font-hind-siliguri), var(--font-manrope), sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+/* Anchored targets land below the sticky nav. */
+section[id] { scroll-margin-top: 76px; }
+/* Nav spacer plus the banner's 8px top margin, so "#top" reaches the very top. */
+#top { scroll-margin-top: 84px; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Gold alone is under 3:1 on the light paper, so an ink ring sits inside it.
+   No border-radius here: both rings follow each element's own shape, so pills
+   stay round when focused. */
+:focus-visible {
+  outline: 2px solid var(--thread);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+/* The site's one motion moment: the banner portrait fades in on load. */
+@media (prefers-reduced-motion: no-preference) {
+  .banner-portrait { animation: fade-in .8s ease-out both; }
+  @keyframes fade-in {
+    from { opacity: 0; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
